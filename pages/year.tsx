@@ -3,7 +3,7 @@ import Head from "next/head";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
-const Home: NextPage = () => {
+const Year: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,11 +14,7 @@ const Home: NextPage = () => {
       <main className="max-w-2xl min-h-screen flex flex-col justify-between mx-auto">
         <Header />
         <div className="flex flex-col items-center">
-          <h1 className="text-4xl font-bold pb-8">March 13, 2022</h1>
-          <div>
-            <input type="text" placeholder="enter habit" />
-            <input type="checkbox" />
-          </div>
+          <h1 className="text-4xl font-bold">2022</h1>
         </div>
         <Footer />
       </main>
@@ -26,4 +22,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Year;
