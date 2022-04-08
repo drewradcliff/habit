@@ -8,10 +8,10 @@ const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 interface Props {
   text: string;
   checked: boolean;
-  id: string;
+  id: number;
   index: number;
-  handleCheck: (id: string, checked: boolean) => void;
-  handleDelete: (id: string) => void;
+  handleCheck: (id: number, checked: boolean) => void;
+  handleDelete: (id: number) => void;
   handleNew: (index: number, emoji: string) => void;
 }
 

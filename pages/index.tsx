@@ -1,35 +1,44 @@
 import React, { useState } from "react";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { v4 as uuidv4 } from "uuid";
+import { prisma } from "../db";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ListItem from "../components/ListItem";
 
-const habitList = [{ id: uuidv4(), text: "🏃‍♀️", checked: false }];
+interface Habit {
+  id: number;
+  text: string;
+  checked: boolean;
+}
 
-const Home: NextPage = () => {
-  const [list, setList] = useState(habitList);
+interface Props {
+  habits: Habit[];
+}
 
-  const handleCheck = (id: string, checked: boolean) => {
+const Home: NextPage<Props> = ({ habits }) => {
+  const [list, setList] = useState(habits);
+
+  const handleCheck = (id: number, checked: boolean) => {
     let newList = list.map((item) => {
       return item.id === id ? { ...item, checked } : item;
     });
     setList(newList);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     setList(list.filter((item) => item.id !== id));
   };
 
   const handleNew = (index: number, emoji: string) => {
-    const newList = [...list];
-    newList.splice(index + 1, 0, {
-      id: uuidv4(),
-      text: emoji,
-      checked: false,
-    });
-    setList(newList);
+    // const newList = [...list];
+    // newList.splice(index + 1, 0, {
+    //   id: uuidv4(),
+    //   text: emoji,
+    //   checked: false,
+    // });
+    // setList(newList);
   };
 
   return (
@@ -62,6 +71,11 @@ const Home: NextPage = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const habits = await prisma.habit.findMany();
+  return { props: { habits } };
 };
 
 export default Home;
