@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import type { GetServerSideProps, NextPage } from "next";
+import dynamic from "next/dynamic";
 import Head from "next/head";
-import { v4 as uuidv4 } from "uuid";
+import { IEmojiData } from "emoji-picker-react";
 import { prisma } from "../db";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ListItem from "../components/ListItem";
+import AddHabit from "../components/AddHabbit";
+
+const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
 interface Habit {
   id: number;
@@ -19,6 +23,7 @@ interface Props {
 
 const Home: NextPage<Props> = ({ habits }) => {
   const [list, setList] = useState(habits);
+  const [picker, setPicker] = useState(false);
 
   const handleCheck = (id: number, checked: boolean) => {
     let newList = list.map((item) => {
@@ -31,7 +36,7 @@ const Home: NextPage<Props> = ({ habits }) => {
     setList(list.filter((item) => item.id !== id));
   };
 
-  const handleNew = (index: number, emoji: string) => {
+  const handleNew = (emoji: string) => {
     // const newList = [...list];
     // newList.splice(index + 1, 0, {
     //   id: uuidv4(),
@@ -39,6 +44,11 @@ const Home: NextPage<Props> = ({ habits }) => {
     //   checked: false,
     // });
     // setList(newList);
+  };
+
+  const onEmojiClick = (e: React.MouseEvent, emojiObject: IEmojiData) => {
+    handleNew(emojiObject.emoji);
+    setPicker(false);
   };
 
   return (
@@ -59,14 +69,18 @@ const Home: NextPage<Props> = ({ habits }) => {
                 text={item.text}
                 checked={item.checked}
                 id={item.id}
-                index={index}
                 handleCheck={handleCheck}
                 handleDelete={handleDelete}
-                handleNew={handleNew}
               />
             ))}
           </div>
+          <AddHabit />
         </div>
+        {picker && (
+          <div className="absolute">
+            <Picker onEmojiClick={onEmojiClick} />
+          </div>
+        )}
         <Footer />
       </main>
     </>
