@@ -15,6 +15,13 @@ export default function ListItem({
   handleCheck,
   handleDelete,
 }: Props) {
+  // const handleCheck = (id: number, checked: boolean) => {
+  //   let newList = list.map((item) => {
+  //     return item.id === id ? { ...item, checked } : item;
+  //   });
+  //   setList(newList);
+  // };
+
   return (
     <div className="flex items-center p-2 text-3xl group relative">
       <p className="w-[36px] text-center mr-2">{text}</p>

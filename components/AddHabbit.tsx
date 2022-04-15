@@ -1,9 +1,22 @@
 import { PlusIcon } from "@heroicons/react/outline";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import { useMutation, useQueryClient } from "react-query";
+import { newHabit } from "../apis";
 
 export default function AddHabit() {
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation(newHabit, {
+    onMutate: async (newHabit) => {
+      await queryClient.cancelQueries("habits");
+      queryClient.setQueryData("habits", (old: any) => [...old, newHabit]);
+    },
+  });
+
   return (
-    <button className="hover:text-green-300">
+    <button
+      onClick={() => mutate({ text: "🤷‍♂️", checked: false })}
+      className="hover:text-green-300"
+    >
       <Tooltip.Provider delayDuration={0}>
         <Tooltip.Root>
           <Tooltip.Trigger asChild>

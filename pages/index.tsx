@@ -1,39 +1,31 @@
 import React, { useState } from "react";
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { IEmojiData } from "emoji-picker-react";
-import { prisma } from "../db";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ListItem from "../components/ListItem";
 import AddHabit from "../components/AddHabbit";
+import { useQuery } from "react-query";
+import { getHabits } from "../apis";
+import { Habit } from "@prisma/client";
 
 const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
-interface Habit {
-  id: number;
-  text: string;
-  checked: boolean;
-}
-
-interface Props {
-  habits: Habit[];
-}
-
-const Home: NextPage<Props> = ({ habits }) => {
-  const [list, setList] = useState(habits);
+const Home: NextPage = () => {
   const [picker, setPicker] = useState(false);
+  const { data } = useQuery<Habit[]>("habits", getHabits);
 
   const handleCheck = (id: number, checked: boolean) => {
-    let newList = list.map((item) => {
-      return item.id === id ? { ...item, checked } : item;
-    });
-    setList(newList);
+    //   let newList = list.map((item) => {
+    //     return item.id === id ? { ...item, checked } : item;
+    //   });
+    //   setList(newList);
   };
-
+  // };
   const handleDelete = (id: number) => {
-    setList(list.filter((item) => item.id !== id));
+    // setList(list.filter((item) => item.id !== id));
   };
 
   const handleNew = (emoji: string) => {
@@ -51,6 +43,8 @@ const Home: NextPage<Props> = ({ habits }) => {
     setPicker(false);
   };
 
+  if (!data) return <>Loading...</>;
+
   return (
     <>
       <Head>
@@ -63,7 +57,7 @@ const Home: NextPage<Props> = ({ habits }) => {
         <div className="flex flex-col items-center">
           <h1 className="text-4xl font-bold pb-8">March 13, 2022</h1>
           <div>
-            {list.map((item, index) => (
+            {data.map((item) => (
               <ListItem
                 key={item.id}
                 text={item.text}
@@ -85,11 +79,6 @@ const Home: NextPage<Props> = ({ habits }) => {
       </main>
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const habits = await prisma.habit.findMany();
-  return { props: { habits } };
 };
 
 export default Home;
