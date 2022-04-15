@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <header className="text-right pt-6">
       {routes.map(({ label, route }) => (
-        <Link href={route}>
+        <Link href={route} key={label}>
           <a
             className={clsx(
               "ml-2",

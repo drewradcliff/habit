@@ -1,4 +1,5 @@
 import { PlusIcon } from "@heroicons/react/outline";
+import { Habit } from "@prisma/client";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { useMutation, useQueryClient } from "react-query";
 import { newHabit } from "../apis";
@@ -6,9 +7,19 @@ import { newHabit } from "../apis";
 export default function AddHabit() {
   const queryClient = useQueryClient();
   const { mutate } = useMutation(newHabit, {
-    onMutate: async (newHabit) => {
+    onMutate: async (habit) => {
       await queryClient.cancelQueries("habits");
-      queryClient.setQueryData("habits", (old: any) => [...old, newHabit]);
+      const previousValue = queryClient.getQueryData<Habit[]>("habits");
+      if (previousValue) {
+        queryClient.setQueryData("habits", [...previousValue, habit]);
+      }
+      return { previousValue };
+    },
+    onError: (err, newHabit, context: any) => {
+      queryClient.setQueryData("habits", context.previousValue);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries("habits");
     },
   });
 

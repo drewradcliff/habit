@@ -16,34 +16,10 @@ const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 const Home: NextPage = () => {
   const [picker, setPicker] = useState(false);
   const { data } = useQuery<Habit[]>("habits", getHabits);
-
-  const handleCheck = (id: number, checked: boolean) => {
-    //   let newList = list.map((item) => {
-    //     return item.id === id ? { ...item, checked } : item;
-    //   });
-    //   setList(newList);
-  };
+  // const onEmojiClick = (e: React.MouseEvent, emojiObject: IEmojiData) => {
+  //   handleNew(emojiObject.emoji);
+  //   setPicker(false);
   // };
-  const handleDelete = (id: number) => {
-    // setList(list.filter((item) => item.id !== id));
-  };
-
-  const handleNew = (emoji: string) => {
-    // const newList = [...list];
-    // newList.splice(index + 1, 0, {
-    //   id: uuidv4(),
-    //   text: emoji,
-    //   checked: false,
-    // });
-    // setList(newList);
-  };
-
-  const onEmojiClick = (e: React.MouseEvent, emojiObject: IEmojiData) => {
-    handleNew(emojiObject.emoji);
-    setPicker(false);
-  };
-
-  if (!data) return <>Loading...</>;
 
   return (
     <>
@@ -57,24 +33,19 @@ const Home: NextPage = () => {
         <div className="flex flex-col items-center">
           <h1 className="text-4xl font-bold pb-8">March 13, 2022</h1>
           <div>
-            {data.map((item) => (
-              <ListItem
-                key={item.id}
-                text={item.text}
-                checked={item.checked}
-                id={item.id}
-                handleCheck={handleCheck}
-                handleDelete={handleDelete}
-              />
-            ))}
+            {data ? (
+              data.map((habit) => <ListItem key={habit.id} habit={habit} />)
+            ) : (
+              <>Loading...</>
+            )}
           </div>
           <AddHabit />
         </div>
-        {picker && (
+        {/* {picker && (
           <div className="absolute">
             <Picker onEmojiClick={onEmojiClick} />
           </div>
-        )}
+        )} */}
         <Footer />
       </main>
     </>
