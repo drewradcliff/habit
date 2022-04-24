@@ -3,15 +3,19 @@ import { PlusIcon } from "@heroicons/react/outline";
 import { Habit } from "@prisma/client";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { IEmojiData } from "emoji-picker-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { newHabit } from "../apis";
+import { useOnClickOutside } from "../hooks/useOnClickOutside";
 
 const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
 export default function AddHabit() {
-  const [picker, setPicker] = useState(false);
   const queryClient = useQueryClient();
+  const [picker, setPicker] = useState(false);
+  const ref = useRef(null);
+  useOnClickOutside(ref, () => setPicker(false));
+
   const onEmojiClick = (e: React.MouseEvent, emojiObject: IEmojiData) => {
     mutate({ text: emojiObject.emoji, checked: false });
     setPicker(false);
@@ -53,7 +57,7 @@ export default function AddHabit() {
         </Tooltip.Provider>
       </button>
       {picker && (
-        <div className="absolute">
+        <div ref={ref} className="absolute">
           <Picker onEmojiClick={onEmojiClick} />
         </div>
       )}
