@@ -53,10 +53,13 @@ export default function ListItem({ habit }: Props) {
   });
 
   return (
-    <div className="flex items-center p-2 text-3xl group relative">
+    <div
+      key={habit.id}
+      className="flex items-center p-2 text-3xl group relative"
+    >
       <p className="w-[36px] text-center mr-2">{habit.text}</p>
       <input
-        className="w-6 h-6 mr-2"
+        className="w-6 h-6 mr-2 cursor-pointer"
         type="checkbox"
         checked={habit.checked}
         onChange={() => handleUpdate({ ...habit, checked: !habit.checked })}
