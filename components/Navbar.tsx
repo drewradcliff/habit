@@ -8,7 +8,7 @@ const routes = [
   { label: "year", route: "/year" },
 ];
 
-export default function Header() {
+export default function Navbar() {
   const router = useRouter();
 
   return (
