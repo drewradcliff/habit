@@ -16,7 +16,7 @@ export default async function handler(
         const habits = await prisma.habit.findMany({
           where: {
             user: {
-              email: session?.user?.email,
+              email: session?.user?.email!,
             },
           },
         });
