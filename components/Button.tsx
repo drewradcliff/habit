@@ -11,6 +11,10 @@ const button = cva("button", {
         "hover:bg-gray-800",
         "transition",
         "duration-200",
+        "dark:bg-gray-900",
+        "dark:text-green-300",
+        "dark:hover:bg-green-300",
+        "dark:hover:text-gray-800",
       ],
     },
     size: {
