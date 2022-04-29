@@ -1,8 +1,8 @@
 import { Habit } from "@prisma/client";
 import axios from "axios";
 
-export const getHabits = async () => {
-  const res = await axios.get("/api/habits");
+export const getHabits = async (start: Date, end: Date) => {
+  const res = await axios.get(`/api/habits?start=${start}&end=${end}`);
   return res.data;
 };
 

@@ -7,7 +7,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Habit[] | Habit>
 ) {
-  const { method, body } = req;
+  const {
+    method,
+    body,
+    query: { start, end },
+  } = req;
   const session = await getSession({ req });
 
   if (session) {
@@ -15,9 +19,19 @@ export default async function handler(
       case "GET":
         const habits = await prisma.habit.findMany({
           where: {
-            user: {
-              email: session?.user?.email!,
-            },
+            AND: [
+              {
+                user: {
+                  email: session?.user?.email,
+                },
+              },
+              {
+                createdAt: {
+                  gte: new Date(start as string),
+                  lt: new Date(end as string),
+                },
+              },
+            ],
           },
         });
         res.status(200).json([...habits]);
