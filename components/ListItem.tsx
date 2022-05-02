@@ -62,7 +62,6 @@ export default function ListItem({ habit }: Props) {
       <Checkbox
         checked={habit.checked}
         onChange={() => {
-          console.log(habit.checked);
           handleUpdate({ ...habit, checked: !habit.checked });
         }}
       />

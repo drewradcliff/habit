@@ -8,12 +8,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { method } = req;
-
-  console.log("test");
   const session = await getSession({ req });
 
   if (session) {
     if (method === "GET") {
+      const lastYear = moment().subtract(1, "year").startOf("week");
       const habits = await prisma.habit.findMany({
         where: {
           AND: [
@@ -24,7 +23,7 @@ export default async function handler(
             },
             {
               createdAt: {
-                gte: moment().subtract(1, "year").startOf("week").format(),
+                gte: lastYear.format(),
                 lt: moment().format(),
               },
             },
@@ -46,7 +45,8 @@ export default async function handler(
       }
 
       let activity = [];
-      for (let i = 364; i >= 0; i--) {
+      const daysLastYear = moment().diff(lastYear, "days");
+      for (let i = daysLastYear; i >= 0; i--) {
         let formatDate = moment().subtract(i, "days").format("YYYY-MM-DD");
         activity.push({
           date: formatDate,
