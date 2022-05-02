@@ -31,6 +31,7 @@ const Year: NextPage = () => {
         <div className="flex flex-col flex-wrap max-h-[120px] mt-12 w-full content-center">
           {data?.map(({ count, date }) => (
             <Tooltip
+              key={date}
               content={`${count} completed on ${moment(date).format(
                 "MMM D, YYYY"
               )}`}
