@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { Habit } from "@prisma/client";
 import { getSession } from "next-auth/react";
 import { prisma } from "../../../db";
+import moment from "moment";
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,8 +28,8 @@ export default async function handler(
               },
               {
                 createdAt: {
-                  gte: new Date(start as string),
-                  lt: new Date(end as string),
+                  gte: moment(start).format(),
+                  lt: moment(end).format(),
                 },
               },
             ],
@@ -53,7 +54,7 @@ export default async function handler(
         break;
       default:
         res.setHeader("Allow", ["GET", "POST"]);
-        res.status(405).end(`Methdo ${method} Not Allowed`);
+        res.status(405).end(`Method ${method} Not Allowed`);
     }
   }
 }

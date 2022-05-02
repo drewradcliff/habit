@@ -20,3 +20,8 @@ export const updateHabit = async (habit: Habit) => {
   const res = await axios.patch(`/api/habits/${habit.id}`, { habit });
   return res.data;
 };
+
+export const getActivity = async () => {
+  const res = await axios.get("/api/activity");
+  return res.data;
+};
