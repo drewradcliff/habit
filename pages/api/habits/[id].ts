@@ -1,6 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../db";
 
+// PATCH /api/[id]
+// Required fields in query: id
+// Required fields in body: habit
+
+// DELETE /api/[id]
+// Required fields in query: id
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

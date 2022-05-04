@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import { prisma } from "../../../db";
 
+// GET /api/habits/year
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

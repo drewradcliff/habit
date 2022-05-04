@@ -21,7 +21,12 @@ export const updateHabit = async (habit: Habit) => {
   return res.data;
 };
 
-export const getActivity = async () => {
-  const res = await axios.get("/api/activity");
+export const getYearHabits = async () => {
+  const res = await axios.get("/api/habits/year");
+  return res.data;
+};
+
+export const getMonthHabits = async (start: Date, end: Date) => {
+  const res = await axios.get(`/api/habits/month?start=${start}&end=${end}`);
   return res.data;
 };

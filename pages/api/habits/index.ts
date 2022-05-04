@@ -4,13 +4,18 @@ import { getSession } from "next-auth/react";
 import { prisma } from "../../../db";
 import moment from "moment";
 
+// GET /api/habits
+// Required fields in query: start end
+
+// POST /api/habits
+// Required fields in body: text checked
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Habit[] | Habit>
 ) {
   const {
     method,
-    body,
+    body: { text, checked },
     query: { start, end },
   } = req;
   const session = await getSession({ req });
@@ -38,7 +43,6 @@ export default async function handler(
         res.status(200).json([...habits]);
         break;
       case "POST":
-        const { text, checked } = body;
         const result = await prisma.habit.create({
           data: {
             text,
