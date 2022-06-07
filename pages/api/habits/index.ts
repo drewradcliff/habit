@@ -3,6 +3,7 @@ import { getSession } from "next-auth/react";
 import { prisma } from "../../../db";
 import moment from "moment";
 import { HabitResponse } from "../../../types/indext";
+import { Habit } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,11 +35,10 @@ export default async function handler(
         res.status(200).json([...habits]);
         break;
       case "POST":
-        const { text, checked } = body;
+        const { text } = body;
         const result = await prisma.habit.create({
           data: {
             text,
-            checked,
             user: {
               connect: {
                 email: session?.user?.email!,
@@ -46,7 +46,7 @@ export default async function handler(
             },
           },
         });
-        res.status(200).json(result);
+        res.status(200).json({ ...result, records: [] });
         break;
       default:
         res.setHeader("Allow", ["GET", "POST"]);

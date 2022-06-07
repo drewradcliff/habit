@@ -89,7 +89,7 @@ export default function ListItem({ habit }: Props) {
     >
       <label className="w-[36px] text-center mr-2">{habit.text}</label>
       <Checkbox
-        checked={!!habit.records.length}
+        checked={!!habit.records?.length}
         onChange={() => {
           if (!habit.records.length) {
             handleAddRecord({
