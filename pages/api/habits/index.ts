@@ -1,18 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Habit } from "@prisma/client";
 import { getSession } from "next-auth/react";
 import { prisma } from "../../../db";
 import moment from "moment";
+import { HabitResponse } from "../../../types/indext";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Habit[] | Habit>
+  res: NextApiResponse<HabitResponse[] | HabitResponse>
 ) {
-  const {
-    method,
-    body,
-    query: { start, end },
-  } = req;
+  const { method, body } = req;
   const session = await getSession({ req });
 
   if (session) {
@@ -20,19 +16,19 @@ export default async function handler(
       case "GET":
         const habits = await prisma.habit.findMany({
           where: {
-            AND: [
-              {
-                user: {
-                  email: session?.user?.email,
+            user: {
+              email: session?.user?.email,
+            },
+          },
+          include: {
+            records: {
+              where: {
+                date: {
+                  gte: moment().startOf("day").toDate(),
+                  lt: moment().endOf("day").toDate(),
                 },
               },
-              {
-                createdAt: {
-                  gte: moment(start).format(),
-                  lt: moment(end).format(),
-                },
-              },
-            ],
+            },
           },
         });
         res.status(200).json([...habits]);

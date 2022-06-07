@@ -2,10 +2,11 @@ import { XIcon } from "@heroicons/react/outline";
 import { Habit } from "@prisma/client";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteHabit, updateHabit } from "../apis";
+import { HabitResponse } from "../types/indext";
 import { Checkbox } from "./Checkbox";
 
 interface Props {
-  habit: Habit;
+  habit: HabitResponse;
 }
 
 export default function ListItem({ habit }: Props) {
@@ -13,7 +14,7 @@ export default function ListItem({ habit }: Props) {
   const { mutate: handleDelete } = useMutation(deleteHabit, {
     onMutate: async (itemId) => {
       await queryClient.cancelQueries("habits");
-      const previousValue = queryClient.getQueryData<Habit[]>("habits");
+      const previousValue = queryClient.getQueryData<HabitResponse[]>("habits");
       if (previousValue) {
         queryClient.setQueryData(
           "habits",
@@ -33,7 +34,7 @@ export default function ListItem({ habit }: Props) {
   const { mutate: handleUpdate } = useMutation(updateHabit, {
     onMutate: async (habit) => {
       await queryClient.cancelQueries("habits");
-      const previousValue = queryClient.getQueryData<Habit[]>("habits");
+      const previousValue = queryClient.getQueryData<HabitResponse[]>("habits");
       if (previousValue) {
         queryClient.setQueryData(
           "habits",
@@ -60,7 +61,7 @@ export default function ListItem({ habit }: Props) {
     >
       <label className="w-[36px] text-center mr-2">{habit.text}</label>
       <Checkbox
-        checked={habit.checked}
+        checked={!!habit.records.length}
         onChange={() => {
           handleUpdate({ ...habit, checked: !habit.checked });
         }}
