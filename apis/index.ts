@@ -1,4 +1,4 @@
-import { Habit } from "@prisma/client";
+import { Habit, Record } from "@prisma/client";
 import axios from "axios";
 
 export const getHabits = async () => {
@@ -18,6 +18,13 @@ export const deleteHabit = async (id: number) => {
 
 export const updateHabit = async (habit: Habit) => {
   const res = await axios.patch(`/api/habits/${habit.id}`, { habit });
+  return res.data;
+};
+
+export const newRecord = async (record: Partial<Record>) => {
+  const res = await axios.post(`/api/records`, {
+    record,
+  });
   return res.data;
 };
 

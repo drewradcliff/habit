@@ -1,7 +1,8 @@
 import { XIcon } from "@heroicons/react/outline";
 import { Habit } from "@prisma/client";
+import moment from "moment";
 import { useMutation, useQueryClient } from "react-query";
-import { deleteHabit, updateHabit } from "../apis";
+import { deleteHabit, newRecord } from "../apis";
 import { HabitResponse } from "../types/indext";
 import { Checkbox } from "./Checkbox";
 
@@ -31,15 +32,16 @@ export default function ListItem({ habit }: Props) {
     },
   });
 
-  const { mutate: handleUpdate } = useMutation(updateHabit, {
-    onMutate: async (habit) => {
+  const { mutate: handleAddRecord } = useMutation(newRecord, {
+    onMutate: async (record) => {
       await queryClient.cancelQueries("habits");
       const previousValue = queryClient.getQueryData<HabitResponse[]>("habits");
       if (previousValue) {
         queryClient.setQueryData(
           "habits",
           previousValue.map((prevHabit) => {
-            if (prevHabit.id === habit.id) return habit;
+            if (prevHabit.id === habit.id)
+              return { ...prevHabit, records: [...prevHabit.records, record] };
             return prevHabit;
           })
         );
@@ -50,7 +52,7 @@ export default function ListItem({ habit }: Props) {
       queryClient.setQueryData("habits", context.previousValue);
     },
     onSettled: (habit) => {
-      queryClient.invalidateQueries(["habits", habit.id]);
+      queryClient.invalidateQueries("habits");
     },
   });
 
@@ -63,7 +65,15 @@ export default function ListItem({ habit }: Props) {
       <Checkbox
         checked={!!habit.records.length}
         onChange={() => {
-          handleUpdate({ ...habit, checked: !habit.checked });
+          if (!habit.records.length) {
+            handleAddRecord({
+              habitId: habit.id,
+              date: new Date(),
+            });
+          }
+          // else {
+          //   handleDeleteRecord(habit.id);
+          // }
         }}
       />
       <div
