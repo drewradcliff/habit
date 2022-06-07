@@ -1,8 +1,6 @@
 import { XIcon } from "@heroicons/react/outline";
-import { Habit } from "@prisma/client";
-import moment from "moment";
 import { useMutation, useQueryClient } from "react-query";
-import { deleteHabit, newRecord } from "../apis";
+import { deleteHabit, deleteRecord, newRecord } from "../apis";
 import { HabitResponse } from "../types/indext";
 import { Checkbox } from "./Checkbox";
 
@@ -40,8 +38,36 @@ export default function ListItem({ habit }: Props) {
         queryClient.setQueryData(
           "habits",
           previousValue.map((prevHabit) => {
-            if (prevHabit.id === habit.id)
+            if (prevHabit.id === habit.id) {
               return { ...prevHabit, records: [...prevHabit.records, record] };
+            }
+            return prevHabit;
+          })
+        );
+      }
+      return { previousValue };
+    },
+    onError: (err, habit, context: any) => {
+      queryClient.setQueryData("habits", context.previousValue);
+    },
+    onSettled: (habit) => {
+      queryClient.invalidateQueries("habits");
+    },
+  });
+
+  const { mutate: handleDeleteRecord } = useMutation(deleteRecord, {
+    onMutate: async (id) => {
+      await queryClient.cancelQueries("habits");
+      const previousValue = queryClient.getQueryData<HabitResponse[]>("habits");
+      if (previousValue) {
+        queryClient.setQueryData(
+          "habits",
+          previousValue.map((prevHabit) => {
+            if (prevHabit.id === habit.id)
+              return {
+                ...prevHabit,
+                records: prevHabit.records.filter((r) => r.id !== id),
+              };
             return prevHabit;
           })
         );
@@ -70,10 +96,9 @@ export default function ListItem({ habit }: Props) {
               habitId: habit.id,
               date: new Date(),
             });
+          } else {
+            handleDeleteRecord(habit.records[0].id);
           }
-          // else {
-          //   handleDeleteRecord(habit.id);
-          // }
         }}
       />
       <div
