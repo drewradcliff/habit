@@ -2,7 +2,7 @@ import clsx from "clsx";
 import moment from "moment";
 import type { NextPage } from "next";
 import { useQuery } from "react-query";
-import { getActivity } from "../apis";
+import { getRecords } from "../apis";
 import Layout from "../components/Layout";
 import Tooltip from "../components/Tooltip";
 
@@ -12,7 +12,7 @@ interface Activity {
 }
 
 const Year: NextPage = () => {
-  const { data } = useQuery<Activity[]>("activity", getActivity);
+  const { data } = useQuery<Activity[]>("activity", getRecords);
 
   const getColor = (count: number) => {
     if (!count) return "bg-gray-200 dark:bg-gray-700";

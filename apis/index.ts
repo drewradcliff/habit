@@ -16,8 +16,8 @@ export const deleteHabit = async (id: number) => {
   return res.data;
 };
 
-export const updateHabit = async (habit: Habit) => {
-  const res = await axios.patch(`/api/habits/${habit.id}`, { habit });
+export const getRecords = async () => {
+  const res = await axios.get(`/api/records`);
   return res.data;
 };
 
@@ -30,10 +30,5 @@ export const newRecord = async (record: Partial<Record>) => {
 
 export const deleteRecord = async (id: number) => {
   const res = await axios.delete(`/api/records/${id}`);
-  return res.data;
-};
-
-export const getActivity = async () => {
-  const res = await axios.get("/api/activity");
   return res.data;
 };

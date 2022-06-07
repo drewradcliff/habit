@@ -4,7 +4,6 @@ import clsx from "clsx";
 
 const routes = [
   { label: "day", route: "/" },
-  { label: "month", route: "/month" },
   { label: "year", route: "/year" },
 ];
 
