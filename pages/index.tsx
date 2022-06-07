@@ -2,19 +2,17 @@ import React, { useEffect } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
-import { Habit } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import moment from "moment";
 import ListItem from "../components/ListItem";
 import AddHabit from "../components/AddHabbit";
 import Layout from "../components/Layout";
 import { getHabits } from "../apis";
+import { HabitResponse } from "../types/indext";
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession();
-  const { data } = useQuery<Habit[]>("habits", () =>
-    getHabits(moment().startOf("day").toDate(), moment().endOf("day").toDate())
-  );
+  const { data } = useQuery<HabitResponse[]>("habits", getHabits);
   const router = useRouter();
 
   useEffect(() => {

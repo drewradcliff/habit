@@ -7,7 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { method } = req;
+  const { method, body } = req;
   const session = await getSession({ req });
 
   if (session) {
@@ -15,32 +15,32 @@ export default async function handler(
       const lastYear = moment().subtract(1, "year").startOf("week");
       const habits = await prisma.habit.findMany({
         where: {
-          AND: [
-            {
-              user: {
-                email: session?.user?.email,
-              },
-            },
-            {
-              createdAt: {
+          user: {
+            email: session?.user?.email,
+          },
+        },
+        include: {
+          records: {
+            where: {
+              date: {
                 gte: lastYear.format(),
                 lt: moment().format(),
               },
             },
-            {
-              checked: true,
-            },
-          ],
+          },
         },
       });
-
       let habitCounts: { [date: string]: number } = {};
       for (let i = 0; i < habits.length; i++) {
-        let formatDate = moment(habits[i].createdAt).format("YYYY-MM-DD");
-        if (habitCounts[formatDate]) {
-          habitCounts[formatDate]++;
-        } else {
-          habitCounts[formatDate] = 1;
+        for (let j = 0; j < habits[i].records.length; j++) {
+          let formatDate = moment(habits[i].records[j].date).format(
+            "YYYY-MM-DD"
+          );
+          if (habitCounts[formatDate]) {
+            habitCounts[formatDate]++;
+          } else {
+            habitCounts[formatDate] = 1;
+          }
         }
       }
 
@@ -53,7 +53,17 @@ export default async function handler(
           count: habitCounts[formatDate] ?? 0,
         });
       }
+
       res.status(200).json(activity);
+    }
+    if (method === "POST") {
+      const { record } = body;
+      const result = await prisma.record.create({
+        data: {
+          ...record,
+        },
+      });
+      res.status(200).json(result);
     }
   }
 }

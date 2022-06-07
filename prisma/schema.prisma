@@ -61,8 +61,15 @@ model VerificationToken {
 model Habit {
   id        Int      @id @default(autoincrement())
   text      String
-  checked   Boolean  @default(false)
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   createdAt DateTime @default(now())
+  records   Record[]
+}
+
+model Record {
+  id      Int      @id @default(autoincrement())
+  date    DateTime @default(now())
+  Habit   Habit?   @relation(fields: [habitId], references: [id])
+  habitId Int?
 }

@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { newHabit } from "../apis";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import Tooltip from "./Tooltip";
+import { HabitResponse } from "../types/indext";
 
 const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
@@ -17,14 +18,14 @@ export default function AddHabit() {
   useOnClickOutside(ref, () => setPicker(false));
 
   const onEmojiClick = (e: React.MouseEvent, emojiObject: IEmojiData) => {
-    mutate({ text: emojiObject.emoji, checked: false });
+    mutate({ text: emojiObject.emoji });
     setPicker(false);
   };
 
   const { mutate } = useMutation(newHabit, {
     onMutate: async (habit) => {
       await queryClient.cancelQueries("habits");
-      const previousValue = queryClient.getQueryData<Habit[]>("habits");
+      const previousValue = queryClient.getQueryData<HabitResponse[]>("habits");
       if (previousValue) {
         queryClient.setQueryData("habits", [...previousValue, habit]);
       }

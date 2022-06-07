@@ -25,13 +25,22 @@ export default async function handler(
       );
       break;
     case "DELETE":
-      res.status(200).json(
-        await prisma.habit.delete({
-          where: {
-            id: Number(id),
+      await prisma.habit.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          records: {
+            deleteMany: {},
           },
-        })
-      );
+        },
+      });
+      const result = await prisma.habit.delete({
+        where: {
+          id: Number(id),
+        },
+      });
+      res.status(200).json(result);
       break;
     default:
       res.setHeader("Allow", ["DELETE"]);
