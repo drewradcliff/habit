@@ -1,8 +1,8 @@
-import { XIcon } from "@heroicons/react/outline";
 import { useMutation, useQueryClient } from "react-query";
-import { deleteHabit, deleteRecord, newRecord } from "../apis";
+import { deleteRecord, newRecord } from "../apis";
 import { HabitResponse } from "../types/indext";
 import { Checkbox } from "./Checkbox";
+import DeleteHabit from "./DeleteItem";
 
 interface Props {
   habit: HabitResponse;
@@ -10,25 +10,6 @@ interface Props {
 
 export default function ListItem({ habit }: Props) {
   const queryClient = useQueryClient();
-  const { mutate: handleDelete } = useMutation(deleteHabit, {
-    onMutate: async (itemId) => {
-      await queryClient.cancelQueries("habits");
-      const previousValue = queryClient.getQueryData<HabitResponse[]>("habits");
-      if (previousValue) {
-        queryClient.setQueryData(
-          "habits",
-          previousValue.filter((item) => item.id !== itemId)
-        );
-      }
-      return { previousValue };
-    },
-    onError: (err, newHabit, context: any) => {
-      queryClient.setQueryData("habits", context.previousValue);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries("habits");
-    },
-  });
 
   const { mutate: handleAddRecord } = useMutation(newRecord, {
     onMutate: async (record) => {
@@ -50,7 +31,7 @@ export default function ListItem({ habit }: Props) {
     onError: (err, habit, context: any) => {
       queryClient.setQueryData("habits", context.previousValue);
     },
-    onSettled: (habit) => {
+    onSettled: () => {
       queryClient.invalidateQueries("habits");
     },
   });
@@ -77,7 +58,7 @@ export default function ListItem({ habit }: Props) {
     onError: (err, habit, context: any) => {
       queryClient.setQueryData("habits", context.previousValue);
     },
-    onSettled: (habit) => {
+    onSettled: () => {
       queryClient.invalidateQueries("habits");
     },
   });
@@ -101,12 +82,7 @@ export default function ListItem({ habit }: Props) {
           }
         }}
       />
-      <div
-        className="w-6 h-6 absolute left-[85px]"
-        onClick={() => handleDelete(habit.id)}
-      >
-        <XIcon className="group-hover:block hidden hover:cursor-pointer dark:text-gray-100 hover:text-green-300" />
-      </div>
+      <DeleteHabit habit={habit} />
     </div>
   );
 }
