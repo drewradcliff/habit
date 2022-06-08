@@ -1,5 +1,4 @@
 import { XIcon } from "@heroicons/react/outline";
-import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteHabit } from "../apis";
 import { HabitResponse } from "../types/indext";
@@ -7,7 +6,6 @@ import AlertDialog from "./AlertDialog";
 
 export default function DeleteHabit({ habit }: { habit: HabitResponse }) {
   const queryClient = useQueryClient();
-  const [open, setOpen] = useState(false);
 
   const { mutate: handleDelete } = useMutation(deleteHabit, {
     onMutate: async (itemId) => {

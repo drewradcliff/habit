@@ -21,7 +21,7 @@ export default function Layout({
         <meta name="description" content="habit tracker" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="container max-w-5xl min-h-screen flex flex-col justify-between mx-auto">
+      <div className="container max-w-5xl min-h-screen flex flex-col justify-between mx-auto px-4">
         <div>{!hideNav && <Navbar />}</div>
         {children}
         <Footer />

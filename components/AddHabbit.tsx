@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import { PlusIcon } from "@heroicons/react/outline";
-import { Habit } from "@prisma/client";
 import { IEmojiData } from "emoji-picker-react";
 import { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";

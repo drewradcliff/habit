@@ -11,13 +11,12 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <header className="text-right pt-6">
+    <header className="text-right pt-6 text-xl sm:text-base mb-12">
       {routes.map(({ label, route }) => (
         <Link href={route} key={label}>
           <a
             className={clsx(
-              "ml-2",
-              "hover:text-green-300",
+              "hover:text-green-300 p-2",
               router.pathname === route && "text-blue-400"
             )}
           >
