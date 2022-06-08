@@ -1,10 +1,13 @@
-import { useMutation, useQueryClient } from "react-query";
 import { XIcon } from "@heroicons/react/outline";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import { deleteHabit } from "../apis";
 import { HabitResponse } from "../types/indext";
+import AlertDialog from "./AlertDialog";
 
 export default function DeleteHabit({ habit }: { habit: HabitResponse }) {
   const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
 
   const { mutate: handleDelete } = useMutation(deleteHabit, {
     onMutate: async (itemId) => {
@@ -27,11 +30,14 @@ export default function DeleteHabit({ habit }: { habit: HabitResponse }) {
   });
 
   return (
-    <div
-      className="w-6 h-6 absolute left-[85px]"
-      onClick={() => handleDelete(habit.id)}
-    >
-      <XIcon className="group-hover:block hidden hover:cursor-pointer dark:text-gray-100 hover:text-green-300" />
-    </div>
+    <AlertDialog
+      onSubmit={() => handleDelete(habit.id)}
+      description="This will delete the habit and all of its records."
+      trigger={
+        <button className="w-6 h-6 absolute left-[85px]">
+          <XIcon className="group-hover:block hidden hover:cursor-pointer dark:text-gray-100 hover:text-green-300" />
+        </button>
+      }
+    />
   );
 }

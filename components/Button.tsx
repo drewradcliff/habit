@@ -1,20 +1,22 @@
 import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
 
-const button = cva("button", {
+const button = cva(["button", "transition", "duration-200", "rounded-lg"], {
   variants: {
     intent: {
       primary: [
         "bg-gray-300",
-        "rounded-lg",
         "hover:text-green-300",
         "hover:bg-gray-800",
-        "transition",
-        "duration-200",
         "dark:bg-gray-900",
         "dark:text-green-300",
         "dark:hover:bg-green-300",
         "dark:hover:text-gray-800",
+      ],
+      secondary: [
+        "hover:text-green-300",
+        "dark:text-gray-200",
+        "dark:hover:text-green-300",
       ],
     },
     size: {
