@@ -19,7 +19,7 @@ const Home: NextPage = () => {
     if (status === "unauthenticated") {
       router.push("/login");
     }
-  }, [status]);
+  }, [status, router]);
 
   if (session) {
     return (

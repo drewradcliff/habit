@@ -16,7 +16,11 @@ export default function Footer() {
   return (
     <footer className="text-center mb-8 mt-12 flex justify-center items-center">
       {links.map(({ label, icon, link }) => (
-        <a className="text-gray-400 hover:text-green-300 mr-5" href={link}>
+        <a
+          key={label}
+          className="text-gray-400 hover:text-green-300 mr-5"
+          href={link}
+        >
           <div className="flex items-center justify-center">
             {icon}
             <span className="ml-1">{label}</span>
