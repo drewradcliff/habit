@@ -16,6 +16,12 @@ export const deleteHabit = async (id: number) => {
   return res.data;
 };
 
+export const updateHabit = async (habit: Habit) => {
+  console.log(habit);
+  const res = await axios.patch(`/api/habits/${habit.id}`, habit);
+  return res.data;
+};
+
 export const getRecords = async () => {
   const res = await axios.get(`/api/records`);
   return res.data;

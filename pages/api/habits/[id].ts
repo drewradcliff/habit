@@ -7,22 +7,19 @@ export default async function handler(
 ) {
   const {
     query: { id },
-    body: { habit },
+    body,
     method,
   } = req;
 
   switch (method) {
     case "PATCH":
-      res.status(200).json(
-        await prisma.habit.update({
-          where: {
-            id: Number(id),
-          },
-          data: {
-            ...habit,
-          },
-        })
-      );
+      const updatedHabit = await prisma.habit.update({
+        where: { id: Number(id) },
+        data: {
+          ...body,
+        },
+      });
+      res.status(200).json(updatedHabit);
       break;
     case "DELETE":
       await prisma.habit.update({
@@ -43,7 +40,7 @@ export default async function handler(
       res.status(200).json(result);
       break;
     default:
-      res.setHeader("Allow", ["DELETE"]);
+      res.setHeader("Allow", ["DELETE", "PATCH"]);
       res.status(405).end(`Methdo ${method} Not Allowed`);
   }
 }

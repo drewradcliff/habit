@@ -3,6 +3,7 @@ import { deleteRecord, newRecord } from "../apis";
 import { HabitResponse } from "../types/indext";
 import { Checkbox } from "./Checkbox";
 import DeleteHabit from "./DeleteItem";
+import ListItemEmoji from "./ListItemEmoji";
 
 interface Props {
   habit: HabitResponse;
@@ -68,7 +69,7 @@ export default function ListItem({ habit }: Props) {
       key={habit.id}
       className="flex items-center p-2 text-3xl group relative"
     >
-      <label className="w-[36px] text-center mr-2">{habit.text}</label>
+      <ListItemEmoji habit={habit} />
       <Checkbox
         checked={!!habit.records?.length}
         onChange={() => {
