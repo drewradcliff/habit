@@ -50,7 +50,9 @@ export const Checkbox = ({
       onCheckedChange={onChange}
       className={cx(
         checkbox({ intent, size }),
-        checked ? "bg-green-200" : "bg-gray-300 dark:bg-gray-900"
+        checked
+          ? "bg-green-200 hover:bg-green-300"
+          : "bg-gray-300 hover:bg-gray-400 dark:bg-gray-900 dark:hover:bg-black"
       )}
     >
       <Indicator>
