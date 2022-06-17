@@ -1,20 +1,16 @@
 import React, { useEffect } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
 import { useSession } from "next-auth/react";
 import moment from "moment";
-import ListItem from "../components/ListItem";
 import AddHabit from "../components/AddHabbit";
 import Layout from "../components/Layout";
-import { getHabits } from "../apis";
-import { HabitResponse } from "../types/indext";
+import HabitList from "../components/HabitList";
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession();
-  const today = moment().format("YYYY-MM-DD");
-  const { data } = useQuery<HabitResponse[]>("habits", () => getHabits(today));
   const router = useRouter();
+  const { date } = router.query;
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -27,16 +23,10 @@ const Home: NextPage = () => {
       <Layout>
         <div className="flex flex-col items-center">
           <h1 className="text-4xl font-bold pb-8">
-            {moment().format("MMMM Do YYYY")}
+            {moment(date).format("MMMM Do YYYY")}
           </h1>
           <div>
-            {data ? (
-              data.map((habit) => (
-                <ListItem key={habit.id} habit={habit} date={today} />
-              ))
-            ) : (
-              <>Loading...</>
-            )}
+            <HabitList date={date as string} />
           </div>
           <AddHabit />
         </div>

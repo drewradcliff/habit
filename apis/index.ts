@@ -1,8 +1,8 @@
 import { Habit, Record } from "@prisma/client";
 import axios from "axios";
 
-export const getHabits = async () => {
-  const res = await axios.get(`/api/habits`);
+export const getHabits = async (date: string) => {
+  const res = await axios.get(`/api/habits/${date}`);
   return res.data;
 };
 
@@ -12,13 +12,12 @@ export const newHabit = async (habit: Partial<Habit>) => {
 };
 
 export const deleteHabit = async (id: number) => {
-  const res = await axios.delete(`/api/habits/${id}`);
+  const res = await axios.delete(`/api/habits/id/${id}`);
   return res.data;
 };
 
 export const updateHabit = async (habit: Habit) => {
-  console.log(habit);
-  const res = await axios.patch(`/api/habits/${habit.id}`, habit);
+  const res = await axios.patch(`/api/habits/id/${habit.id}`, habit);
   return res.data;
 };
 

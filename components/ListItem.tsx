@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteRecord, newRecord } from "../apis";
 import { HabitResponse } from "../types/indext";
@@ -7,9 +8,10 @@ import ListItemEmoji from "./ListItemEmoji";
 
 interface Props {
   habit: HabitResponse;
+  date: string;
 }
 
-export default function ListItem({ habit }: Props) {
+export default function ListItem({ habit, date }: Props) {
   const queryClient = useQueryClient();
 
   const { mutate: handleAddRecord } = useMutation(newRecord, {
@@ -76,7 +78,7 @@ export default function ListItem({ habit }: Props) {
           if (!habit.records.length) {
             handleAddRecord({
               habitId: habit.id,
-              date: new Date(),
+              date: moment(date).toDate(),
             });
           } else {
             handleDeleteRecord(habit.records[0].id);

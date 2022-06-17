@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import moment from "moment";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { getRecords } from "../apis";
 import Layout from "../components/Layout";
@@ -13,6 +14,7 @@ interface Activity {
 
 const Year: NextPage = () => {
   const { data } = useQuery<Activity[]>("activity", getRecords);
+  const router = useRouter();
 
   const getColor = (count: number) => {
     if (!count) return "bg-gray-200 dark:bg-gray-700";
@@ -20,6 +22,10 @@ const Year: NextPage = () => {
     if (count < 6) return "bg-green-500 dark:bg-green-700";
     if (count < 10) return "bg-green-700 dark:bg-green-500";
     if (count >= 10) return "bg-green-900 dark:bg-green-300";
+  };
+
+  const handleClick = (date: string) => {
+    router.push(`/${date}`);
   };
 
   return (
@@ -37,8 +43,9 @@ const Year: NextPage = () => {
               )}`}
             >
               <div
+                onClick={() => handleClick(date)}
                 className={clsx(
-                  "h-[12px] w-[12px] m-[2px] rounded-sm",
+                  "h-[12px] w-[12px] m-[2px] rounded-sm cursor-pointer",
                   getColor(count)
                 )}
               />
