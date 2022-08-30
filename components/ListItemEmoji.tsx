@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { IEmojiData } from "emoji-picker-react";
 import { useMutation, useQueryClient } from "react-query";
 import { updateHabit } from "../apis";
-import { HabitResponse } from "../types/indext";
+import { HabitResponse } from "../types";
 import EmojiPicker from "./EmojiPicker";
+import { EmojiData } from "../types";
 
 interface Props {
   habit: HabitResponse;
@@ -38,12 +38,12 @@ export default function ListItemEmoji({ habit }: Props) {
     },
   });
 
-  const onEmojiClick = (e: React.MouseEvent, emojiObject: IEmojiData) => {
+  const onEmojiClick = (emojiObject: EmojiData) => {
     mutate({
       id: habit.id,
       userId: habit.userId,
       createdAt: habit.createdAt,
-      text: emojiObject.emoji,
+      text: emojiObject.native,
     });
     setPicker(false);
   };

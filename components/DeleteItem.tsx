@@ -1,7 +1,7 @@
 import { XIcon } from "@heroicons/react/outline";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteHabit } from "../apis";
-import { HabitResponse } from "../types/indext";
+import { HabitResponse } from "../types";
 import AlertDialog from "./AlertDialog";
 
 export default function DeleteHabit({ habit }: { habit: HabitResponse }) {

@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteRecord, newRecord } from "../apis";
-import { HabitResponse } from "../types/indext";
+import { HabitResponse } from "../types";
 import { Checkbox } from "./Checkbox";
 import DeleteHabit from "./DeleteItem";
 import ListItemEmoji from "./ListItemEmoji";

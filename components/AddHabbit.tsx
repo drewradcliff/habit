@@ -1,23 +1,17 @@
-import dynamic from "next/dynamic";
 import { PlusIcon } from "@heroicons/react/outline";
-import { IEmojiData } from "emoji-picker-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { newHabit } from "../apis";
-import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import Tooltip from "./Tooltip";
-import { HabitResponse } from "../types/indext";
-
-const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
+import { HabitResponse, EmojiData } from "../types";
+import EmojiPicker from "./EmojiPicker";
 
 export default function AddHabit() {
   const queryClient = useQueryClient();
   const [picker, setPicker] = useState(false);
-  const ref = useRef(null);
-  useOnClickOutside(ref, () => setPicker(false));
 
-  const onEmojiClick = (e: React.MouseEvent, emojiObject: IEmojiData) => {
-    mutate({ text: emojiObject.emoji });
+  const onEmojiClick = (emojiObject: EmojiData) => {
+    mutate({ text: emojiObject.native });
     setPicker(false);
   };
 
@@ -45,11 +39,11 @@ export default function AddHabit() {
           <PlusIcon className="w-6 h-6 m-4" />
         </Tooltip>
       </button>
-      {picker && (
-        <div ref={ref} className="absolute">
-          <Picker onEmojiClick={onEmojiClick} />
-        </div>
-      )}
+      <EmojiPicker
+        picker={picker}
+        setPicker={setPicker}
+        onEmojiClick={onEmojiClick}
+      />
     </>
   );
 }

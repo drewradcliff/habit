@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import { prisma } from "../../../db";
 import moment from "moment";
-import { HabitResponse } from "../../../types/indext";
+import { HabitResponse } from "../../../types";
 
 export default async function handler(
   req: NextApiRequest,
