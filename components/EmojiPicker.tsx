@@ -22,7 +22,7 @@ export default function EmojiPicker({
   return picker ? (
     <div
       ref={ref}
-      className="absolute z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+      className="fixed z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
     >
       <Picker data={data} onEmojiSelect={onEmojiClick} />
     </div>
