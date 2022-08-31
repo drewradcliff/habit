@@ -21,7 +21,6 @@
     "class-variance-authority": "^0.2.1",
     "clsx": "^1.1.1",
     "emoji-mart": "^5.2.1",
-    "emoji-picker-react": "^3.5.1",
     "iconoir-react": "^4.9.1",
     "moment": "^2.29.3",
     "next": "12.1.0",
