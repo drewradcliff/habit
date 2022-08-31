@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { getHabits } from "../apis";
-import { HabitResponse } from "../types/indext";
+import { HabitResponse } from "../types";
 import ListItem from "./ListItem";
 
 interface Props {

@@ -8,7 +8,7 @@ import ListItem from "../components/ListItem";
 import AddHabit from "../components/AddHabbit";
 import Layout from "../components/Layout";
 import { getHabits } from "../apis";
-import { HabitResponse } from "../types/indext";
+import { HabitResponse } from "../types";
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession();

@@ -1,14 +1,14 @@
 import { useRef } from "react";
-import dynamic from "next/dynamic";
-import { IEmojiData } from "emoji-picker-react";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
-
-const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
+import data from "@emoji-mart/data";
+// @ts-ignore no typescript support
+import Picker from "@emoji-mart/react";
+import { EmojiData } from "../types";
 
 interface Props {
   picker: boolean;
   setPicker: (picker: boolean) => void;
-  onEmojiClick: (e: React.MouseEvent, emojiObject: IEmojiData) => void;
+  onEmojiClick: (emojiObject: EmojiData) => void;
 }
 
 export default function EmojiPicker({
@@ -20,8 +20,11 @@ export default function EmojiPicker({
   useOnClickOutside(ref, () => setPicker(false));
 
   return picker ? (
-    <div ref={ref} className="absolute">
-      <Picker onEmojiClick={onEmojiClick} pickerStyle={{ zIndex: "10" }} />
+    <div
+      ref={ref}
+      className="absolute z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+    >
+      <Picker data={data} onEmojiSelect={onEmojiClick} />
     </div>
   ) : null;
 }
