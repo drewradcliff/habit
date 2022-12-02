@@ -34,7 +34,7 @@ const Year: NextPage = () => {
         <div className="flex flex-col items-center">
           <h1 className="text-4xl font-bold">Last Year</h1>
         </div>
-        <div className="flex md:flex-col max-w-[100px] mx-auto max-h-full flex-wrap md:max-h-[120px] mt-12 md:w-full content-center">
+        <div className="flex md:flex-col max-w-[100px] mx-auto max-h-full flex-wrap-reverse md:flex-wrap md:max-h-[120px] mt-12 md:w-full content-center">
           {data?.map(({ count, date }) => (
             <Tooltip
               key={date}
